@@ -1,12 +1,34 @@
 #include <iostream>
 #include <fstream>
-
+#include <vector>
 using namespace std;
+
+
+
+vector<string> split(string filename, char delim){
+    vector<string> tokens;
+    size_t prev = 0, pos = 0;
+    do
+    {
+        pos = filename.find(delim, prev);
+        if (pos == string::npos) pos = filename.length();
+        string token = filename.substr(prev, pos-prev);
+        if (!token.empty()) tokens.push_back(token);
+        prev = pos + 1;
+    }
+    while (pos < filename.length() && prev < filename.length());
+    return tokens;
+}
+
 
 int main() {
     string filename;
     // EXAMPLE: ../data/a_example.in
     cin >> filename;
+    vector<string> tokens;
+    tokens = split(filename, '/');
+    string letter;
+    letter = split(tokens[2], '_')[0];
     ifstream fs(filename);
     int max_number, pizza_number;
     fs >> max_number;
@@ -15,9 +37,9 @@ int main() {
     // cout << max_number << endl << pizza_number << endl;
     for (int i = 0; i < pizza_number; i++) fs >> pizza_sizes[i];
     // for(int i = 0; i < pizza_number; i++) cout << pizza_sizes[i];
-
     int M[pizza_number + 1][max_number + 1];
-
+    //int *M = new int[()*(max_number + 1)];
+    //std::vector<std::vector<int> > M(pizza_number + 1, std::vector<int>(max_number + 1));
     for (int w = 0; w <= max_number; w++) M[0][w] = 0;
     for (int i = 1; i <= pizza_number; i++) {
         for (int w = 0; w <= max_number; w++) {
@@ -40,7 +62,8 @@ int main() {
     }
 
     ofstream result;
-    result.open("../results/d_result.txt");
+    string folder_name = "../results/";
+    result.open(folder_name.append(letter).append("_result.txt"));
     result << i << endl;
     for(int j = i-1; j>0; j--) result << solution[j] << " ";
     result << solution[0] << endl;
