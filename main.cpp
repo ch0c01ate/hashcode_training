@@ -27,10 +27,9 @@ int main() {
             }
         }
     }
-
     int number = pizza_number, current_max = max_number, solution[pizza_number], i = 0;
     while(number > 0) {
-        if(pizza_sizes[number-1] + M[number-1][current_max - pizza_sizes[number-1]] > M[number-1][current_max]){
+        if(pizza_sizes[number-1] + M[number-1][current_max - pizza_sizes[number-1]] == M[number][current_max]){
             current_max -= pizza_sizes[number-1];
             solution[i] = number-1;
             i++;
@@ -38,9 +37,12 @@ int main() {
         number--;
     }
 
-    cout << i << endl;
-    for(int j = 0; j < i; j++) cout << solution[j];
-    // cout << endl << M[pizza_number][max_number];
+    ofstream result;
+    result.open("../results/d_result.txt");
+    result << i << endl;
+    for(int j = i-1; j>0; j--) result << solution[j] << " ";
+    result << solution[0] << endl;
+    result.close();
 
     return 0;
 }
